@@ -1,2 +1,20 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
+/* Tailwind component classes */
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center px-4 py-3 font-medium transition duration-300 ease-in-out rounded-lg cursor-pointer disabled:scale-100 hover:scale-105 focus:outline-none focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed;
+    }
+
+    .btn-primary {
+        @apply font-semibold text-white bg-gradient-to-r from-teal-500 to-teal-700 focus:ring-teal-600;
+    }
+
+    .btn-outline {
+        @apply text-gray-700 bg-transparent border border-gray-300 hover:bg-gray-50 focus:ring-gray-500;
+    }
+
+    .nav-link {
+        @apply flex items-center px-4 py-2 text-gray-100 rounded-md hover:bg-gray-700;
+    }
+}
