@@ -14,4 +14,9 @@ class Order extends Model
         'amount',
         'status',
     ];
+
+    public function scopeOwned($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
 }

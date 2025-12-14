@@ -16,12 +16,9 @@ class AssetFactory extends Factory
      */
     public function definition(): array
     {
-        $symbols = ['BTC', 'ETH', 'XRP', 'ADA', 'SOL', 'DOT', 'BNB'];
-
         return [
-            'symbol' => fake()->randomElement($symbols),
-            'amount' => fake()->numberBetween(10, 1500),
-            'locked_amount' => 0,
+            'symbol' => 'BTC',
+            'amount' => fake()->randomFloat(2, 0.5, 100),
         ];
     }
 }

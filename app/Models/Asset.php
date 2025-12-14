@@ -16,4 +16,9 @@ class Asset extends Model
         'amount',
         'locked_amount',
     ];
+
+    public function scopeOwned($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
 }

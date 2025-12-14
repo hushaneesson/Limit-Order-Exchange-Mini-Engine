@@ -16,15 +16,16 @@ class UserSeeder extends Seeder
     {
         // default test user
         User::factory()
-            ->has(Asset::factory()->count(3))
+            ->has(Asset::factory()->count(1))
             ->create([
                 'name' => 'Johnny Bravo',
                 'email' => 'test@example.com',
+                'balance' => 36
             ]);
 
         // other users
         User::factory()
-            ->has(Asset::factory()->count(5))
+            ->has(Asset::factory()->count(1))
             ->count(5)
             ->create();
     }
