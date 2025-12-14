@@ -19,4 +19,10 @@ class Order extends Model
     {
         return $query->where('user_id', auth()->id());
     }
+
+    public function asset()
+    {
+        return $this->hasOne(Asset::class, 'user_id', 'user_id')
+            ->whereColumn('assets.symbol', $this->symbol);
+    }
 }

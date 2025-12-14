@@ -23,6 +23,7 @@
                         <th class="px-4 py-2 text-right">Price</th>
                         <th class="px-4 py-2 text-right">Amount</th>
                         <th class="px-4 py-2 text-right">Status</th>
+                        <th class="px-4 py-2"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,17 +53,26 @@
                         <td class="px-4 py-2 text-right">{{ order.amount }}</td>
                         <td class="px-4 py-2 text-right">
                             <span
-                                class="px-2 py-1 rounded-full whitespace-nowrap"
+                                class="px-2 py-1 text-sm rounded-full whitespace-nowrap"
                                 :class="{
                                     'text-sky-600 bg-blue-100':
                                         order.status == 1,
                                     'text-green-700 bg-green-100':
                                         order.status == 2,
                                     'text-amber-600 bg-amber-100':
-                                        order.status == 1,
+                                        order.status == 3,
                                 }"
                                 >{{ statusMap[order.status] }}</span
                             >
+                        </td>
+                        <td class="px-4 py-2 text-right">
+                            <button
+                                v-if="order.status == 1"
+                                @click="selectedOrder = order"
+                                class="text-red-600 btn"
+                            >
+                                Cancel
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -72,18 +82,33 @@
         <p v-if="!loading && orders.length === 0" class="text-gray-500">
             You have no orders.
         </p>
+
+        <CancelOrder
+            v-if="selectedOrder"
+            :processing="cancellingOrder"
+            @cancel="selectedOrder = null"
+            @continue="cancelOrder"
+        >
+            <template #heading> Cancel Order </template>
+            <template #description>
+                Are you certain that you want to cancel this order?
+            </template>
+        </CancelOrder>
     </div>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
 import { Order } from "@/api";
 import { useAuthStore } from "@/stores/auth";
+import CancelOrder from "@/components/WarningModal.vue";
 
 const auth = useAuthStore();
 
 const symbol = ref(null);
 const orders = ref([]);
 const loading = ref(true);
+const cancellingOrder = ref(false);
+const selectedOrder = ref(null);
 
 const statusMap = {
     1: "OPEN",
@@ -105,4 +130,20 @@ onMounted(async () => {
             loading.value = false;
         });
 });
+
+const cancelOrder = () => {
+    cancellingOrder.value = true;
+
+    Order.cancel(selectedOrder.value.id)
+        .then((response) => {
+            selectedOrder.value.status = 3;
+            selectedOrder.value = null;
+        })
+        .catch((error) => {
+            alert(error.response?.data || "Failed to cancel order");
+        })
+        .finally(() => {
+            cancellingOrder.value = false;
+        });
+};
 </script>

@@ -18,6 +18,15 @@ class Order {
     static create(orderData) {
         return axios.post("/orders", orderData);
     }
+
+    /**
+     * Cancel open order
+     * @param {Object} orderId - Order id
+     * @returns {Promise} - Axios promise with cancellation result
+     */
+    static cancel(orderId) {
+        return axios.post(`/orders/${orderId}/cancel`);
+    }
 }
 
 export default Order;

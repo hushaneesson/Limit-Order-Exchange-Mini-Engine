@@ -130,7 +130,7 @@ const order_typeClass = (order_type) => {
     return `${base} bg-white text-gray-700 border-gray-300 hover:bg-gray-50`;
 };
 
-const submit = async () => {
+const submit = () => {
     error.value = null;
 
     if (!form.symbol || !form.price || !form.amount) {
@@ -147,7 +147,7 @@ const submit = async () => {
             router.push({ name: "orders" });
         })
         .catch((error) => {
-            alert(error.response.data);
+            alert(error.response.data || "Failed to create order");
         })
         .finally(() => {
             loading.value = false;

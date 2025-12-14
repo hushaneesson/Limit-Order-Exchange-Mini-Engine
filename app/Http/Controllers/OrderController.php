@@ -8,7 +8,7 @@ use App\Processes\BuyOrderProcess;
 use Illuminate\Support\Facades\DB;
 use App\Processes\SellOrderProcess;
 use Illuminate\Support\Facades\Log;
-use App\Http\Resources\OrderResource;
+use App\Processes\CancelOrderProcess;
 use App\Http\Resources\OrderCollection;
 use App\Http\Requests\LimitOrderRequest;
 use App\Exceptions\InsufficientStockException;
@@ -81,10 +81,32 @@ class OrderController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Mark order as cancelled
      */
-    public function cancel(Order $order)
+    public function cancel($id)
     {
-        //
+        $order = Order::lockForUpdate()->owned()->findOrFail($id);
+
+        try {
+            DB::beginTransaction();
+
+            // only open orders can be cancelled
+            if ($order->status != 1) {
+                return response()->json(['Only open orders can be cancelled'], 400);
+            }
+
+            new CancelOrderProcess($order);
+
+            DB::commit();
+
+            return response()->json(['Order successfully cancelled.']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            Log::debug($e->getMessage());
+            Log::debug($e->getTraceAsString());
+
+            return response()->json(['Error cancelling order'], 400);
+        }
     }
 }

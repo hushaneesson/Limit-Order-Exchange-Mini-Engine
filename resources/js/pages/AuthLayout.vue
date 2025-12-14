@@ -15,7 +15,7 @@
                     auth.user.name
                 }}</span>
 
-                <button @click="openSideBar = false">
+                <button class="md:hidden" @click="openSideBar = false">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -71,7 +71,8 @@
                 'hidden md:block': openSideBar == true,
             }"
         >
-            <div class="flex justify-end py-2">
+            <!-- mobile menu toggle -->
+            <div class="flex justify-end py-2 md:hidden">
                 <button @click="openSideBar = true">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -89,6 +90,7 @@
                     </svg>
                 </button>
             </div>
+
             <router-view />
         </div>
     </div>
