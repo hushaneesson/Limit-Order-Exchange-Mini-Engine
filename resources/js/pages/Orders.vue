@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div class="flex flex-col justify-between gap-5 mb-12 sm:items-center">
+        <div
+            class="flex flex-col justify-between gap-5 mb-12 sm:flex-row sm:items-center"
+        >
             <h1 class="text-2xl font-bold">My Orders</h1>
             <router-link
                 class="w-full btn btn-primary md:w-auto"
@@ -12,10 +14,7 @@
         <div v-if="loading" class="text-gray-500">Loading orders...</div>
 
         <div class="w-full overflow-x-auto bg-white shadow rounded-xl">
-            <table
-                v-if="!loading && orders.length"
-
-            >
+            <table class="w-full" v-if="!loading && orders.length">
                 <thead>
                     <tr class="text-left text-gray-600 border-b">
                         <th class="px-4 py-2">Date</th>
