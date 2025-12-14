@@ -1,15 +1,15 @@
 <template>
     <div
-        class="min-h-screen bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+        class="flex flex-col justify-center min-h-screen px-2 py-12 bg-white sm:px-6 lg:px-8"
     >
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
+            <div class="px-4 py-8 bg-white rounded-lg shadow-lg sm:px-10">
                 <!-- Header -->
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-teal-600">
+                <div class="mb-8 text-center">
+                    <h2 class="text-2xl font-bold text-teal-600 sm:text-3xl">
                         Welcome Back
                     </h2>
-                    <p class="mt-2 text-sm sm:text-base text-gray-600">
+                    <p class="mt-2 text-sm text-gray-600 sm:text-base">
                         Please sign in to your account
                     </p>
                 </div>
@@ -29,7 +29,7 @@
                             v-model="form.email"
                             type="email"
                             id="email"
-                            class="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-teal-500"
+                            class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg sm:px-4 sm:py-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-teal-500"
                         />
                     </div>
 
@@ -40,21 +40,21 @@
                             for="password"
                             >Password</label
                         >
-                        <div class="mt-1 relative">
+                        <div class="relative mt-1">
                             <input
                                 v-model="form.password"
                                 type="password"
                                 id="password"
-                                class="block w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-teal-500"
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-lg sm:px-4 sm:py-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-teal-500"
                             />
                         </div>
                     </div>
 
                     <button
                         type="submit"
-                        class="w-full flex justify-center py-2 px-4 sm:py-3 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                        class="w-full btn btn-primary"
                     >
-                        <span>Sign In</span>
+                        {{ loading ? "Signing in..." : "Sign In" }}
                     </button>
                 </form>
             </div>

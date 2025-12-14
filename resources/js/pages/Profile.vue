@@ -1,15 +1,10 @@
 <template>
-    <div class="space-y-6 p-4">
+    <div class="space-y-6">
         <!-- Header -->
-        <div>
-            <h1 class="text-2xl font-bold">My Balances</h1>
-            <p class="text-gray-500">
-                {{ auth.user?.name }}
-            </p>
-        </div>
+        <h1 class="text-2xl font-bold">My Balances</h1>
 
         <!-- USD Balance -->
-        <div class="bg-white rounded-xl shadow p-6">
+        <div class="p-6 bg-white shadow rounded-xl">
             <p class="text-sm text-gray-500">USD Balance</p>
             <p class="text-3xl font-semibold">
                 {{ formatter.format(usdBalance) }}
@@ -17,8 +12,8 @@
         </div>
 
         <!-- Asset Balances -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">Assets</h2>
+        <div class="p-6 bg-white shadow rounded-xl">
+            <h2 class="mb-4 text-lg font-semibold">Assets</h2>
 
             <div v-if="loading" class="text-gray-500">Loading balances...</div>
 
@@ -28,7 +23,7 @@
 
             <table v-else class="w-full text-left">
                 <thead>
-                    <tr class="border-b text-sm text-gray-500">
+                    <tr class="text-sm text-gray-500 border-b">
                         <th class="pb-2">Asset</th>
                         <th class="pb-2 text-right">Balance</th>
                     </tr>
