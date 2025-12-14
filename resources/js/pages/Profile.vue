@@ -26,6 +26,7 @@
                     <tr class="text-sm text-gray-500 border-b">
                         <th class="pb-2">Asset</th>
                         <th class="pb-2 text-right">Balance</th>
+                        <th class="pb-2 text-right">Locked Balance</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +39,10 @@
                             {{ asset.symbol }}
                         </td>
                         <td class="py-3 text-right">
-                            {{ asset.balance }}
+                            {{ asset.amount }}
+                        </td>
+                        <td class="py-3 text-right">
+                            {{ asset.locked_amount }}
                         </td>
                     </tr>
                 </tbody>
