@@ -1,12 +1,12 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-bold">Laravel + Vue</h1>
-    <p class="mt-2">App is running 🚀</p>
-  </div>
+    <router-view />
 </template>
+<script setup>
+import { onMounted } from "vue";
+import { useAuthStore } from "@/stores/auth";
 
-<script>
-export default {
-  name: 'App',
-}
+const authStore = useAuthStore();
+onMounted(async () => {
+    authStore.init();
+});
 </script>
