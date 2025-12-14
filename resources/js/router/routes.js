@@ -23,6 +23,22 @@ export default [
                     title: "Profile",
                 },
             },
+            {
+                name: "orders",
+                path: "orders",
+                component: () => import("@/pages/orders.vue"),
+                meta: {
+                    title: "Orders",
+                },
+            },
+            {
+                name: "orders.create",
+                path: "orders/create",
+                component: () => import("@/pages/NewOrder.vue"),
+                meta: {
+                    title: "New Order",
+                },
+            },
         ],
     },
 ];

@@ -1,7 +1,4 @@
 import User from "./User";
-import Asset from "./Asset";
+import Order from "./Order";
 
-export {
-    User,
-    Asset,
-};
+export { User, Order };
