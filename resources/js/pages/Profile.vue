@@ -76,6 +76,8 @@ onMounted(async () => {
             if (updatedInfo) {
                 usdBalance.value = updatedInfo.balance;
                 assets.value = updatedInfo.assets;
+
+                toast.success("New matched order! Balance updated");
             }
         }
     );

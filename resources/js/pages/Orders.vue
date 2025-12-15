@@ -111,6 +111,7 @@
                         v-for="order in orders"
                         :key="order.id"
                         class="border-b last:border-0"
+                        :class="{ 'bg-teal-100': updatedOrder == order.id }"
                     >
                         <td class="px-4 py-2 whitespace-nowrap">
                             {{ moment(order.created_at).format("lll") }}
@@ -191,6 +192,7 @@ const orders = ref([]);
 const loading = ref(true);
 const cancellingOrder = ref(false);
 const selectedOrder = ref(null);
+const updatedOrder = ref(null);
 let channel = null;
 
 const statusMap = {
@@ -208,11 +210,15 @@ onMounted(async () => {
             let updatedInfo = event.data[auth.user.id];
 
             if (updatedInfo) {
+                toast.success("New matched order!");
+
                 let order = orders.value.find(
                     (order) => order.id === updatedInfo.updated_order_id
                 );
+
                 if (order) {
                     order.status = 2;
+                    updatedOrder.value = order.id;
                 }
             }
         }
