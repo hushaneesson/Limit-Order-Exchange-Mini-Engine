@@ -50,10 +50,7 @@
                         </div>
                     </div>
 
-                    <button
-                        type="submit"
-                        class="w-full btn btn-primary"
-                    >
+                    <button type="submit" class="w-full btn btn-primary">
                         {{ loading ? "Signing in..." : "Sign In" }}
                     </button>
                 </form>
@@ -66,7 +63,9 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { User } from "@/api";
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -95,7 +94,7 @@ const login = async () => {
             router.push({ name: "profile" });
         })
         .catch(() => {
-            error.value = "Invalid email or password";
+            toast.error("Invalid email or password");
         })
         .finally(() => {
             loading.value = false;

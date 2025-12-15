@@ -1,6 +1,6 @@
-# Trading Platform (Laravel + Vue)
+# app:match-open-ordersTrading Platform (Laravel + Vue)
 
-A simple trading platform built with **Laravel API** and **Vue 3 (Composition API)**.  
+A simple platform built with **Laravel API** and **Vue 3 (Composition API)**.  
 It supports user authentication, asset balances, order placement, order matching, and real-time updates via **Pusher**.
 
 ---

@@ -13,6 +13,10 @@
 
         <div v-if="loading" class="text-gray-500">Loading orders...</div>
 
+        <p v-if="!loading && orders.length == 0" class="text-gray-500">
+            You have no orders.
+        </p>
+
         <div class="w-full overflow-x-auto bg-white shadow rounded-xl">
             <table class="w-full" v-if="!loading && orders.length">
                 <thead>
@@ -79,10 +83,6 @@
             </table>
         </div>
 
-        <p v-if="!loading && orders.length === 0" class="text-gray-500">
-            You have no orders.
-        </p>
-
         <CancelOrder
             v-if="selectedOrder"
             :processing="cancellingOrder"
@@ -97,18 +97,21 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { Order } from "@/api";
 import { useAuthStore } from "@/stores/auth";
 import CancelOrder from "@/components/WarningModal.vue";
+import Echo from "@/echo";
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const auth = useAuthStore();
-
 const symbol = ref(null);
 const orders = ref([]);
 const loading = ref(true);
 const cancellingOrder = ref(false);
 const selectedOrder = ref(null);
+let channel = null;
 
 const statusMap = {
     1: "OPEN",
@@ -117,19 +120,43 @@ const statusMap = {
 };
 
 onMounted(async () => {
-    loading.value = false;
+    fetchOrders();
+
+    channel = Echo.private(`user.${auth.user.id}`).listen(
+        ".order.matched",
+        (event) => {
+            let updatedInfo = event.data[auth.user.id];
+
+            if (updatedInfo) {
+                let order = orders.value.find(
+                    (order) => order.id === updatedInfo.updated_order_id
+                );
+                if (order) {
+                    order.status = 2;
+                }
+            }
+        }
+    );
+});
+
+onBeforeUnmount(() => {
+    if (channel) Echo.leave(channel.name);
+});
+
+const fetchOrders = () => {
+    loading.value = true;
 
     Order.getAll({ symbol: symbol.value })
         .then((response) => {
             orders.value = response.data.orders;
         })
         .catch(() => {
-            alert("Error fetching orders.");
+            toast.error("Error fetching orders.");
         })
         .finally(() => {
             loading.value = false;
         });
-});
+};
 
 const cancelOrder = () => {
     cancellingOrder.value = true;
@@ -138,9 +165,11 @@ const cancelOrder = () => {
         .then((response) => {
             selectedOrder.value.status = 3;
             selectedOrder.value = null;
+
+            toast.success("Order successfully cancelled.");
         })
         .catch((error) => {
-            alert(error.response?.data || "Failed to cancel order");
+            toast.error(error.response?.data || "Failed to cancel order");
         })
         .finally(() => {
             cancellingOrder.value = false;

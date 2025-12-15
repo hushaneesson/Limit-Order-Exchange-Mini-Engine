@@ -101,7 +101,9 @@
 import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { Order } from "@/api";
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
 const error = ref(null);
@@ -142,12 +144,12 @@ const submit = () => {
 
     Order.create(form)
         .then((response) => {
-            alert("Order submitted successfully");
+            toast.success("Order submitted successfully.");
 
             router.push({ name: "orders" });
         })
         .catch((error) => {
-            alert(error.response.data || "Failed to create order");
+            toast.error(error.response.data || "Failed to create order");
         })
         .finally(() => {
             loading.value = false;

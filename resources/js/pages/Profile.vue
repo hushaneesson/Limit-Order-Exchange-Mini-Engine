@@ -52,17 +52,40 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { User } from "@/api";
+import Echo from "@/echo";
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const auth = useAuthStore();
-
 const usdBalance = ref("0.00");
 const assets = ref([]);
 const loading = ref(true);
+let channel = null;
 
 onMounted(async () => {
+    fetchProfile();
+
+    channel = Echo.private(`user.${auth.user.id}`).listen(
+        ".order.matched",
+        (event) => {
+            let updatedInfo = event.data[auth.user.id];
+
+            if (updatedInfo) {
+                usdBalance.value = updatedInfo.balance;
+                assets.value = updatedInfo.assets;
+            }
+        }
+    );
+});
+
+onBeforeUnmount(() => {
+    if (channel) Echo.leave(channel.name);
+});
+
+const fetchProfile = () => {
     loading.value = false;
 
     User.getProfile()
@@ -71,10 +94,10 @@ onMounted(async () => {
             assets.value = response.data.assets;
         })
         .catch(() => {
-            alert("Error fetching profile.");
+            toast.error("Error fetching profile.");
         })
         .finally(() => {
             loading.value = false;
         });
-});
+};
 </script>
