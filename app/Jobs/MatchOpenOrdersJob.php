@@ -87,8 +87,10 @@ class MatchOpenOrdersJob implements ShouldQueue
             event(new OrderMatched(
                 $buyOrder->user_id,
                 $sellOrder->user_id,
-                $buyerData,
-                $sellerData
+                [
+                    $buyOrder->user_id =>  $buyerData,
+                    $sellOrder->user_id => $sellerData
+                ]
             ));
         } catch (\Exception $e) {
             DB::rollBack();
