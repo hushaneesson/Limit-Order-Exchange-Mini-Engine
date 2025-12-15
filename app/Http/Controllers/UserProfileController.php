@@ -17,7 +17,7 @@ class UserProfileController extends Controller
             'assets' => []
         ];
 
-        $data['assets'] = Asset::where('user_id', auth()->id())->select('id', 'symbol', 'amount', 'locked_amount')->get();
+        $data['assets'] = Asset::owned()->select('id', 'symbol', 'amount', 'locked_amount')->get();
 
         return response()->json($data);
     }

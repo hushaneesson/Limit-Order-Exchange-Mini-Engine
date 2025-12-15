@@ -25,4 +25,9 @@ class Order extends Model
         return $this->hasOne(Asset::class, 'user_id', 'user_id')
             ->whereColumn('assets.symbol', $this->symbol);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
