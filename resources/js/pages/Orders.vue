@@ -17,6 +17,82 @@
             You have no orders.
         </p>
 
+        <div class="mb-6">
+            <div
+                class="p-4 bg-white border border-gray-200 shadow-lg rounded-xl"
+            >
+                <h2 class="font-bold text-stone-700">Filters</h2>
+
+                <div
+                    class="grid grid-cols-1 gap-6 mt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                >
+                    <div class="flex flex-col">
+                        <label
+                            for="symbol"
+                            class="text-sm font-medium text-stone-600"
+                            >Symbol</label
+                        >
+
+                        <select
+                            id="symbol"
+                            v-model="filters.symbol"
+                            class="block w-full px-2 py-2 mt-2 border border-gray-200 rounded-md shadow-sm outline-none focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50"
+                        >
+                            <option value="">Choose One</option>
+                            <option>BTC</option>
+                            <option>ETH</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label
+                            for="side"
+                            class="text-sm font-medium text-stone-600"
+                            >Side</label
+                        >
+
+                        <select
+                            id="side"
+                            v-model="filters.side"
+                            class="block w-full px-2 py-2 mt-2 border border-gray-200 rounded-md shadow-sm outline-none focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50"
+                        >
+                            <option value="">Choose One</option>
+                            <option value="buy">Buy</option>
+                            <option value="sell">Sell</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label
+                            for="status"
+                            class="text-sm font-medium text-stone-600"
+                            >Status</label
+                        >
+
+                        <select
+                            id="status"
+                            v-model="filters.status"
+                            class="block w-full px-2 py-2 mt-2 border border-gray-200 rounded-md shadow-sm outline-none focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50"
+                        >
+                            <option value="">Choose One</option>
+                            <option value="1">Open</option>
+                            <option value="2">Filled</option>
+                            <option value="3">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div
+                    class="grid justify-end w-full grid-cols-2 mt-6 space-x-4 md:flex"
+                >
+                    <button @click="reset" class="btn btn-outline">
+                        Reset
+                    </button>
+                    <button @click="fetchOrders" class="bg-gray-300 btn">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="w-full overflow-x-auto bg-white shadow rounded-xl">
             <table class="w-full" v-if="!loading && orders.length">
                 <thead>
@@ -59,7 +135,7 @@
                             <span
                                 class="px-2 py-1 text-sm rounded-full whitespace-nowrap"
                                 :class="{
-                                    'text-sky-600 bg-blue-100':
+                                    'text-sky-600 bg-teal-100':
                                         order.status == 1,
                                     'text-green-700 bg-green-100':
                                         order.status == 2,
@@ -106,7 +182,11 @@ import { useToast } from "vue-toastification";
 
 const toast = useToast();
 const auth = useAuthStore();
-const symbol = ref(null);
+const filters = ref({
+    symbol: "",
+    side: "",
+    status: "",
+});
 const orders = ref([]);
 const loading = ref(true);
 const cancellingOrder = ref(false);
@@ -143,10 +223,16 @@ onBeforeUnmount(() => {
     if (channel) Echo.leave(channel.name);
 });
 
+const reset = () => {
+    filters.value = { symbol: "", side: "", status: "" };
+
+    fetchOrders();
+};
+
 const fetchOrders = () => {
     loading.value = true;
 
-    Order.getAll({ symbol: symbol.value })
+    Order.getAll(filters.value)
         .then((response) => {
             orders.value = response.data.orders;
         })

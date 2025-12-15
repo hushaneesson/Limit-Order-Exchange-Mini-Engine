@@ -21,18 +21,21 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $filter = [
-            'page' => $request->page ?? 1,
-            'size' => $request->size ?? 10
-        ];
-
         $query = Order::owned()->latest();
 
         if ($request->symbol) {
             $query->where('symbol', $request->symbol);
         }
 
-        $orders = $query->paginate($filter['size'], '*', 'page', $filter['page']);
+        if ($request->side) {
+            $query->where('side', $request->side);
+        }
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $orders = $query->get();
 
         return new OrderCollection($orders);
     }

@@ -12,7 +12,7 @@
                 class="flex items-center justify-between h-16 px-2 bg-teal-900 md:justify-center"
             >
                 <span class="font-bold text-white uppercase">{{
-                    auth.user.name
+                    auth.user?.name
                 }}</span>
 
                 <button class="md:hidden" @click="openSideBar = false">
